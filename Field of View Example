@@ -1,0 +1,50 @@
+		/// <summary>
+		/// Smooth FOV Adjustments relative to speed. Pulls the outside of the screen to a blur as you move faster and faster like
+		/// stretching reality at warp speeds.
+		/// </summary>
+		public void AdjustFOV ()
+		{
+        // No Camera - Leave function
+				if (playerCam == null)
+						return;
+				
+				// At Velocity Magnitude > 3000 begin adjusting FOV
+				if (ship.GetComponent<Rigidbody> ().velocity.magnitude > 3000) {
+						
+						// Calculate the FOV needed for the current speed using cross multiplication
+						float goToFOV = (75 * shipScript.rbody.velocity.magnitude) / 3000;
+						float fovChangePercentage = 0;
+						// Limit FOV to within parameters
+						if (goToFOV > 135)
+								goToFOV = 135;
+						if (goToFOV < 75)
+								goToFOV = 75;
+						
+						// Calculate the change of FOV this frame and determine if it gets larger / smaller
+						float fovChange = goToFOV - playerCam.fieldOfView;
+						float fovAdjustment = (fovChange > 0) ? 3 : -3;
+            
+            // Calculate the % change compared to last frame
+						fovChangePercentage = Mathf.Abs (fovChange / playerCam.fieldOfView) * 100;
+
+            // Allow adjustment if change is greater than 15% to smooth out adjustments
+						if (fovChangePercentage > 15)
+								adjusting = true;
+
+            // Don't allow adujustments if change is less than 5%
+						if (fovChangePercentage < 5)
+								adjusting = false;						
+
+            // Adjust FOV relative to 1 second.
+						if (adjusting)
+							playerCam.fieldOfView += fovAdjustment * Time.deltaTime;
+
+				}
+
+        // Limit FOVs to within parameters
+				if (playerCam.fieldOfView > 135)
+						playerCam.fieldOfView = 135;
+
+				if (playerCam.fieldOfView < 75)
+						playerCam.fieldOfView = 75; 
+		}
