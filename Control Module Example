@@ -1,0 +1,162 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// WORK IN PROGRESS //////// WORK IN PROGRESS //////// WORK IN PROGRESS //////// WORK IN PROGRESS ////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+using UnityEngine;
+using System.Collections;
+
+public class ControlSystem : MonoBehaviour
+{
+		/// <summary>
+		/// Current Acceleration
+		/// </summary>
+		Vector3 Acceleration;
+
+		/// <summary>
+		/// Previous Velocity
+		/// </summary>
+		Vector3 previousVelocity;
+
+		/// <summary>
+		/// Velocity in Vector Form.
+		/// </summary>
+		Vector3 Velocity;
+
+		Vector3 previousPosition;
+
+		Vector3 Position;
+
+		/// <summary>
+		/// The Magnitude of Acceleraiton
+		/// </summary>
+		float mAcceleration;
+
+		/// <summary>
+		/// Current Velocity Magnitude
+		/// </summary>
+		float mVelocity;
+
+		/// <summary>
+		/// Previous Velocity Magnitude		
+		/// </summary>
+		float mPreviousVelocity;
+
+		float timeStamp;
+		float previousTimeStamp;
+
+		Rigidbody rbody;
+		Ship ship;
+
+		// Control Input
+		float input_Roll;
+		float input_Throttle;
+		float input_Elevate;
+		float input_Strafe;
+
+		// Input dampening for things like keyboards.
+		public float input_RollDampening;
+		public float input_ThrottleDampening;
+		public float input_ElevateDampening;
+		public float input_StrafeDampening;
+
+		// Current Output Power
+		float power_Throttle;
+
+		// limits
+		float maxThrottle = 100;
+
+		public void Setup(Rigidbody body, Ship inShip)
+		{
+				rbody = body;
+				ship = inShip;
+		}
+
+		// Use this for initialization
+		void Start ()
+		{
+	
+		}
+
+
+		// Update is called once per frame
+		void Update ()
+		{
+				UpdateVariables ();
+				ParseControls ();
+		}
+
+		void UpdateVariables()
+		{
+				// Update Previous
+				previousTimeStamp = timeStamp;
+				mPreviousVelocity = mVelocity;
+				previousVelocity = Velocity;
+				previousPosition = Position;
+
+				Position = rbody.position;
+				timeStamp = Time.fixedTime;
+
+				// Calculate Movement Information.
+				Velocity = rbody.velocity;
+				Acceleration = (Velocity - previousVelocity) / (timeStamp - previousTimeStamp);
+
+
+				mAcceleration = Acceleration.magnitude;
+				mVelocity = Velocity.magnitude;
+		}
+
+		void ParseControls()
+		{
+			
+		}
+
+		/// <summary>
+		/// Throttles up and down towards max power.
+		/// </summary>
+		/// <param name="throttlePower">Throttle power.</param>
+		void Throttle(float throttlePower)
+		{
+				float throttleDir = Mathf.Sign (throttlePower);
+				// Control the positive Acceleration
+				if (throttlePower > power_Throttle + (input_ThrottleDampening * throttleDir))
+						throttlePower = input_ThrottleDampening * throttleDir;
+
+				// Limit throttle to current max throttle (can be modified by buffs) 
+				power_Throttle = (Mathf.Abs(power_Throttle + throttlePower) < maxThrottle) ? power_Throttle += throttlePower : (maxThrottle * throttleDir);
+		}
+
+		/// <summary>
+		/// Centers on the current target.
+		/// </summary>
+		void CenterOnTarget()
+		{
+
+		}
+
+		/// <summary>
+		/// Roll Left / Right
+		/// </summary>
+		/// <param name="rollPower">Power Indicates Roll Direction and Speed.</param>
+		void Roll(float rollPower)
+		{
+
+		}
+
+		/// <summary>
+		/// Left / Right
+		/// </summary>
+		/// <param name="strafePower">Strafe power.</param>
+		void Strafe(float strafePower)
+		{
+				
+		}
+
+		/// <summary>
+		/// Up / Down
+		/// </summary>
+		/// <param name="elevatePower">Elevate power.</param>
+		void Elevate(float elevatePower)
+		{
+
+		}
+}
