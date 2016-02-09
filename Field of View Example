@@ -1,10 +1,10 @@
-		/// <summary>
-		/// Smooth FOV Adjustments relative to speed. Pulls the outside of the screen to a blur as you move faster and faster like
-		/// stretching reality at warp speeds.
-		/// </summary>
-		public void AdjustFOV ()
-		{
-        // No Camera - Leave function
+/// <summary>
+/// Smooth FOV Adjustments relative to speed. Pulls the outside of the screen to a blur as you move faster and faster like
+/// stretching reality at warp speeds.
+/// </summary>
+public void AdjustFOV ()
+{
+      // No Camera - Leave function
 				if (playerCam == null)
 						return;
 				
