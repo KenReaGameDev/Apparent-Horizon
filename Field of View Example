@@ -48,3 +48,4 @@ public void AdjustFOV ()
 				if (playerCam.fieldOfView < 75)
 						playerCam.fieldOfView = 75; 
 		}
+
